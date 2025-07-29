@@ -172,10 +172,41 @@ body {
     margin: 2rem auto;
 }
 
+/* Image Styling */
 .img-fluid {
     max-width: 100%;
     height: auto;
     border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.img-fluid:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+/* Specific image containers */
+.scientist-image-container {
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    margin: 1rem 0;
+}
+
+.laundry-image-container {
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    margin: 1rem 0;
+    text-align: center;
+}
+
+/* Ensure images load properly */
+img[src*="~/images/"] {
+    display: block;
+    max-width: 100%;
+    height: auto;
 }
 
 @media (max-width: 768px) {

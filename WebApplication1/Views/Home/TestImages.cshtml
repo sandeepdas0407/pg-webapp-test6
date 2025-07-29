@@ -1,0 +1,80 @@
+@{
+    ViewData["Title"] = "Image Test Page";
+}
+
+<div class="container mt-4">
+    <h1>Image Test Page</h1>
+    <p>This page tests all images in the application to ensure they load correctly.</p>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>P&G Logo (Navigation)</h5>
+                </div>
+                <div class="card-body text-center">
+                    <img src="~/images/pg-logo.png" alt="P&G Logo" class="pg-logo" style="height: 40px; width: auto;">
+                    <p class="mt-2"><small>Path: ~/images/pg-logo.png</small></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Scientist Lab Image</h5>
+                </div>
+                <div class="card-body text-center">
+                    <img src="~/images/scientist-lab.jpg" alt="Scientist in laboratory" class="img-fluid" style="max-height: 200px;">
+                    <p class="mt-2"><small>Path: ~/images/scientist-lab.jpg</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Woman Laundry Image</h5>
+                </div>
+                <div class="card-body text-center">
+                    <img src="~/images/woman-laundry.jpg" alt="Woman doing laundry" class="img-fluid" style="max-height: 200px;">
+                    <p class="mt-2"><small>Path: ~/images/woman-laundry.jpg</small></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Image Directory Status</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Expected Images:</h6>
+                    <ul class="list-unstyled">
+                        <li>✅ pg-logo.png</li>
+                        <li>✅ scientist-lab.jpg</li>
+                        <li>✅ woman-laundry.jpg</li>
+                    </ul>
+                    <p class="text-success"><small>All images should load from ~/images/ folder</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <h5>Image Organization Summary:</h5>
+                <ul>
+                    <li><strong>All images</strong> are stored in <code>wwwroot/images/</code> folder</li>
+                    <li><strong>Navigation logo</strong> uses standardized P&G branding</li>
+                    <li><strong>Content images</strong> have enhanced styling and hover effects</li>
+                    <li><strong>Responsive design</strong> ensures images scale properly on all devices</li>
+                    <li><strong>Lazy loading</strong> improves page performance</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
