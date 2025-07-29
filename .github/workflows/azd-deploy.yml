@@ -34,14 +34,29 @@ jobs:
       uses: Azure/setup-azd@v1.0.0
       
     - name: Login to Azure
-      uses: azure/login@v2
+      uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         
     - name: Azure Developer CLI Deploy
       run: |
+        # Configure AZD to use Azure CLI authentication
         azd config set auth.useAzCliAuth true
-        azd env new ${{ env.AZURE_ENV_NAME }} --location "${{ env.AZURE_LOCATION }}" --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}" --confirm
+        
+        # Set environment variables
+        azd env set AZURE_SUBSCRIPTION_ID "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+        azd env set AZURE_LOCATION "${{ env.AZURE_LOCATION }}"
+        
+        # Create or select environment
+        if azd env list | grep -q "${{ env.AZURE_ENV_NAME }}"; then
+          echo "Environment ${{ env.AZURE_ENV_NAME }} exists, selecting it"
+          azd env select ${{ env.AZURE_ENV_NAME }}
+        else
+          echo "Creating new environment ${{ env.AZURE_ENV_NAME }}"
+          azd env new ${{ env.AZURE_ENV_NAME }} --location "${{ env.AZURE_LOCATION }}" --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}" --confirm
+        fi
+        
+        # Deploy the application
         azd deploy --no-prompt
       shell: bash
       env:

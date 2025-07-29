@@ -17,7 +17,6 @@ env:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: Production
     
     steps:
     - name: Checkout code
@@ -42,33 +41,12 @@ jobs:
       run: dotnet publish ./WebApplication1 --configuration Release --no-build --output ./publish
       
     - name: Login to Azure
-      uses: azure/login@v2
+      uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         
-    - name: Create Resource Group if not exists
-      run: |
-        if ! az group show --name ${{ env.RESOURCE_GROUP_NAME }} &> /dev/null; then
-          echo "Creating resource group ${{ env.RESOURCE_GROUP_NAME }}"
-          az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location "${{ env.AZURE_LOCATION }}"
-        else
-          echo "Resource group ${{ env.RESOURCE_GROUP_NAME }} already exists"
-        fi
-      shell: bash
-        
-    - name: Deploy Azure infrastructure
-      uses: azure/arm-deploy@v2
-      with:
-        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-        template: ./infra/main.bicep
-        parameters: ./infra/main.parameters.json environmentName=${{ env.AZURE_ENV_NAME }} location="${{ env.AZURE_LOCATION }}"
-        deploymentMode: Incremental
-        deploymentName: 'github-deployment-${{ github.run_number }}'
-      continue-on-error: true
-        
     - name: Deploy to Azure Web App
-      uses: azure/webapps-deploy@v3
+      uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         package: ./publish
