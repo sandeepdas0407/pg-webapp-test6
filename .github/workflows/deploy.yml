@@ -44,6 +44,13 @@ jobs:
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+        enable-AzPSSession: false
+        
+    - name: Verify Azure CLI Login
+      run: |
+        echo "Verifying Azure CLI login..."
+        az account show
+      shell: bash
         
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2

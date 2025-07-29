@@ -1,0 +1,46 @@
+name: Test Azure Authentication
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-auth:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Debug Azure Credentials
+      run: |
+        echo "Checking if AZURE_CREDENTIALS secret exists..."
+        if [ -z "${{ secrets.AZURE_CREDENTIALS }}" ]; then
+          echo "❌ AZURE_CREDENTIALS secret is not set"
+          exit 1
+        else
+          echo "✅ AZURE_CREDENTIALS secret exists"
+        fi
+        
+        if [ -z "${{ secrets.AZURE_SUBSCRIPTION_ID }}" ]; then
+          echo "❌ AZURE_SUBSCRIPTION_ID secret is not set"
+          exit 1
+        else
+          echo "✅ AZURE_SUBSCRIPTION_ID secret exists"
+        fi
+      shell: bash
+      
+    - name: Test Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        enable-AzPSSession: false
+      continue-on-error: true
+      
+    - name: Verify Authentication
+      run: |
+        echo "Testing Azure CLI commands..."
+        az account show || echo "❌ Azure CLI authentication failed"
+        az account list --output table || echo "❌ Cannot list accounts"
+        az group list --output table || echo "❌ Cannot list resource groups"
+      shell: bash
+      continue-on-error: true
