@@ -1,22 +1,23 @@
 name: Azure Developer CLI Deploy
 
 on:
-  push:
-    branches:
-      - main
-      - master
-  pull_request:
-    branches:
-      - main
-      - master
   workflow_dispatch:
+  # Disabled auto-trigger to avoid conflicts with main deploy workflow
+  # push:
+  #   branches:
+  #     - main
+  #     - master
 
 permissions:
   id-token: write
   contents: read
 
+env:
+  AZURE_ENV_NAME: 'webapplication1'
+  AZURE_LOCATION: 'East US'
+
 jobs:
-  build-and-deploy:
+  azd-deploy:
     runs-on: ubuntu-latest
     environment: Production
     
@@ -35,25 +36,15 @@ jobs:
     - name: Login to Azure
       uses: azure/login@v2
       with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
         
-    - name: Azure Developer CLI - Login
-      run: azd auth login --use-device-code=false
-      shell: bash
-      
-    - name: Set Azure Developer CLI environment
+    - name: Azure Developer CLI Deploy
       run: |
-        azd env set AZURE_ENV_NAME ${{ vars.AZURE_ENV_NAME }}
-        azd env set AZURE_LOCATION ${{ vars.AZURE_LOCATION }}
-        azd env set AZURE_SUBSCRIPTION_ID ${{ vars.AZURE_SUBSCRIPTION_ID }}
-      shell: bash
-      
-    - name: Provision and Deploy with Azure Developer CLI
-      run: azd up --no-prompt
+        azd config set auth.useAzCliAuth true
+        azd env new ${{ env.AZURE_ENV_NAME }} --location "${{ env.AZURE_LOCATION }}" --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}" --confirm
+        azd deploy --no-prompt
       shell: bash
       env:
-        AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
-        AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
-        AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+        AZURE_ENV_NAME: ${{ env.AZURE_ENV_NAME }}
+        AZURE_LOCATION: ${{ env.AZURE_LOCATION }}
+        AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}

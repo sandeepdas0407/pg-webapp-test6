@@ -1,8 +1,12 @@
 name: webapplication1
+metadata:
+  template: dotnet@2.0.0-beta.1
 infra:
   provider: bicep
+  path: infra
 services:
   WebApplication1:
     project: WebApplication1
     host: appservice
     language: dotnet
+    dist: bin/Release/net9.0

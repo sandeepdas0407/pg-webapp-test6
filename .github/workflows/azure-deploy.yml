@@ -80,6 +80,10 @@ jobs:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     environment:
       name: 'Infrastructure'
+    env:
+      RESOURCE_GROUP_NAME: 'rg-webapplication1'
+      AZURE_ENV_NAME: 'webapplication1'
+      AZURE_LOCATION: 'East US'
       
     steps:
     - name: Checkout code
@@ -90,12 +94,17 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         
+    - name: Create Resource Group if not exists
+      run: |
+        az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location "${{ env.AZURE_LOCATION }}" || true
+      shell: bash
+        
     - name: Deploy Azure infrastructure
       uses: azure/arm-deploy@v2
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: rg-PandG1
+        resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
         template: ./infra/main.bicep
-        parameters: ./infra/main.parameters.json
+        parameters: ./infra/main.parameters.json environmentName=${{ env.AZURE_ENV_NAME }} location="${{ env.AZURE_LOCATION }}"
         deploymentMode: Incremental
         deploymentName: 'github-deployment-${{ github.run_number }}'
