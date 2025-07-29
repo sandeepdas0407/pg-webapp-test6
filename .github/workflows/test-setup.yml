@@ -1,0 +1,59 @@
+name: Test GitHub Actions Setup
+
+on:
+  workflow_dispatch:
+  
+jobs:
+  test-configuration:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Check repository variables
+      run: |
+        echo "🔍 Checking Repository Configuration"
+        echo "AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}"
+        echo "AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}"
+        echo "AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}"
+        
+    - name: Check if secrets are configured
+      run: |
+        echo "🔐 Checking Secrets Configuration"
+        if [ -z "${{ secrets.AZURE_CLIENT_ID }}" ]; then
+          echo "❌ AZURE_CLIENT_ID not configured"
+        else
+          echo "✅ AZURE_CLIENT_ID configured"
+        fi
+        
+        if [ -z "${{ secrets.AZURE_CLIENT_SECRET }}" ]; then
+          echo "❌ AZURE_CLIENT_SECRET not configured"
+        else
+          echo "✅ AZURE_CLIENT_SECRET configured"
+        fi
+        
+        if [ -z "${{ secrets.AZURE_TENANT_ID }}" ]; then
+          echo "❌ AZURE_TENANT_ID not configured"
+        else
+          echo "✅ AZURE_TENANT_ID configured"
+        fi
+        
+        if [ -z "${{ secrets.AZURE_SUBSCRIPTION_ID }}" ]; then
+          echo "❌ AZURE_SUBSCRIPTION_ID not configured"
+        else
+          echo "✅ AZURE_SUBSCRIPTION_ID configured"
+        fi
+        
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+        
+    - name: Test build
+      run: |
+        echo "🔨 Testing .NET Build"
+        cd WebApplication1
+        dotnet restore
+        dotnet build --configuration Release
+        echo "✅ Build successful!"
