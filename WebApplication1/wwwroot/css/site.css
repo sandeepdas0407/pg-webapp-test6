@@ -50,16 +50,7 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* P&G Logo Styling */
-.pg-logo {
-    height: 40px;
-    width: auto;
-    transition: transform 0.2s ease-in-out;
-}
-
-.pg-logo:hover {
-    transform: scale(1.05);
-}
+/* P&G Logo Styling - moved to enhanced section below */
 
 .navbar-brand {
     padding: 0.5rem 0;
@@ -207,6 +198,52 @@ img[src*="~/images/"] {
     display: block;
     max-width: 100%;
     height: auto;
+}
+
+/* Image loading states */
+img {
+    transition: opacity 0.3s ease;
+}
+
+img:not([src]), img[src=""] {
+    opacity: 0;
+}
+
+/* Fallback for broken images */
+img::before {
+    content: "🖼️ Image Loading...";
+    display: block;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border: 1px dashed #ccc;
+    border-radius: 4px;
+}
+
+/* Hide fallback when image loads */
+img:not([src])::before,
+img[src=""]::before {
+    display: block;
+}
+
+/* Enhanced P&G Logo specific styling */
+.pg-logo {
+    max-height: 50px;
+    width: auto;
+    object-fit: contain;
+    transition: transform 0.2s ease-in-out, opacity 0.3s ease;
+}
+
+.pg-logo:hover {
+    transform: scale(1.05);
+}
+
+/* Ensure logo loads visibly */
+.navbar-brand .pg-logo {
+    display: inline-block;
+    vertical-align: middle;
 }
 
 @media (max-width: 768px) {
