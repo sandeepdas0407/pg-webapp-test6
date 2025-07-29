@@ -1,0 +1,109 @@
+@{
+    ViewData["Title"] = "Image Diagnostics";
+}
+
+<div class="container mt-4">
+    <h1>🔍 Image Diagnostics</h1>
+    <p>Testing image visibility and static file serving...</p>
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Direct Image Tests</h5>
+                </div>
+                <div class="card-body">
+                    <h6>1. P&G Logo (Absolute Path)</h6>
+                    <img src="/images/pg-logo.png" alt="P&G Logo Test" style="height: 50px; border: 2px solid red;">
+                    <p><small>Path: /images/pg-logo.png</small></p>
+                    
+                    <h6>2. Scientist Image (Absolute Path)</h6>
+                    <img src="/images/scientist-lab.jpg" alt="Scientist Test" style="height: 100px; border: 2px solid red;">
+                    <p><small>Path: /images/scientist-lab.jpg</small></p>
+                    
+                    <h6>3. Laundry Image (Absolute Path)</h6>
+                    <img src="/images/woman-laundry.jpg" alt="Laundry Test" style="height: 100px; border: 2px solid red;">
+                    <p><small>Path: /images/woman-laundry.jpg</small></p>
+                    
+                    <h6>4. Using Tilde Path (~)</h6>
+                    <img src="~/images/pg-logo.png" alt="Tilde Test" style="height: 50px; border: 2px solid blue;">
+                    <p><small>Path: ~/images/pg-logo.png</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Manual Image Path Tests</h5>
+                </div>
+                <div class="card-body">
+                    <p>Try these URLs directly in your browser:</p>
+                    <ul>
+                        <li><a href="/images/pg-logo.png" target="_blank">http://localhost:5265/images/pg-logo.png</a></li>
+                        <li><a href="/images/scientist-lab.jpg" target="_blank">http://localhost:5265/images/scientist-lab.jpg</a></li>
+                        <li><a href="/images/woman-laundry.jpg" target="_blank">http://localhost:5265/images/woman-laundry.jpg</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>JavaScript Diagnostics</h5>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-primary" onclick="testImagePaths()">Test Image Paths</button>
+                    <div id="diagnostic-results" class="mt-3" style="background: #f8f9fa; padding: 1rem; font-family: monospace;">
+                        Click the button to test image accessibility...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function testImagePaths() {
+    const results = document.getElementById('diagnostic-results');
+    results.innerHTML = 'Testing image paths...<br>';
+    
+    const imagePaths = [
+        '/images/pg-logo.png',
+        '/images/scientist-lab.jpg', 
+        '/images/woman-laundry.jpg'
+    ];
+    
+    imagePaths.forEach(path => {
+        fetch(path, { method: 'HEAD' })
+            .then(response => {
+                if (response.ok) {
+                    results.innerHTML += `✅ ${path} - Status: ${response.status} (${response.statusText})<br>`;
+                } else {
+                    results.innerHTML += `❌ ${path} - Status: ${response.status} (${response.statusText})<br>`;
+                }
+            })
+            .catch(error => {
+                results.innerHTML += `❌ ${path} - Error: ${error.message}<br>`;
+            });
+    });
+    
+    // Test image loading
+    results.innerHTML += '<br>Testing image loading...<br>';
+    imagePaths.forEach(path => {
+        const img = new Image();
+        img.onload = () => {
+            results.innerHTML += `✅ ${path} - Loaded successfully (${img.naturalWidth}x${img.naturalHeight})<br>`;
+        };
+        img.onerror = () => {
+            results.innerHTML += `❌ ${path} - Failed to load<br>`;
+        };
+        img.src = path;
+    });
+}
+</script>

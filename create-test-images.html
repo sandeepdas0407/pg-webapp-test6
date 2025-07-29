@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Test Images</title>
+</head>
+<body>
+    <h1>Creating Test Images</h1>
+    <canvas id="logoCanvas" width="120" height="60"></canvas>
+    <canvas id="scientistCanvas" width="400" height="300"></canvas>
+    <canvas id="laundryCanvas" width="400" height="300"></canvas>
+    
+    <script>
+        // Create P&G Logo
+        const logoCanvas = document.getElementById('logoCanvas');
+        const logoCtx = logoCanvas.getContext('2d');
+        logoCtx.fillStyle = '#00338d';
+        logoCtx.fillRect(0, 0, 120, 60);
+        logoCtx.fillStyle = 'white';
+        logoCtx.font = 'bold 24px Arial';
+        logoCtx.textAlign = 'center';
+        logoCtx.fillText('P&G', 60, 38);
+        
+        // Create Scientist Image
+        const scientistCanvas = document.getElementById('scientistCanvas');
+        const scientistCtx = scientistCanvas.getContext('2d');
+        scientistCtx.fillStyle = '#f0f0f0';
+        scientistCtx.fillRect(0, 0, 400, 300);
+        scientistCtx.fillStyle = '#333';
+        scientistCtx.font = '20px Arial';
+        scientistCtx.textAlign = 'center';
+        scientistCtx.fillText('🔬 Scientist in Laboratory', 200, 150);
+        scientistCtx.fillText('Testing Ingredients', 200, 180);
+        
+        // Create Laundry Image
+        const laundryCanvas = document.getElementById('laundryCanvas');
+        const laundryCtx = laundryCanvas.getContext('2d');
+        laundryCtx.fillStyle = '#e8f4f8';
+        laundryCtx.fillRect(0, 0, 400, 300);
+        laundryCtx.fillStyle = '#333';
+        laundryCtx.font = '20px Arial';
+        laundryCtx.textAlign = 'center';
+        laundryCtx.fillText('👕 Woman Doing Laundry', 200, 150);
+        laundryCtx.fillText('Fragrance Experience', 200, 180);
+        
+        // Download function
+        function downloadCanvas(canvas, filename) {
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        // Auto-download after 1 second
+        setTimeout(() => {
+            downloadCanvas(logoCanvas, 'pg-logo.png');
+            downloadCanvas(scientistCanvas, 'scientist-lab.jpg');
+            downloadCanvas(laundryCanvas, 'woman-laundry.jpg');
+        }, 1000);
+    </script>
+</body>
+</html>

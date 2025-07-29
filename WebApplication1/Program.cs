@@ -18,19 +18,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-// Configure static files with caching for images
-app.UseStaticFiles(new StaticFileOptions
-{
-    OnPrepareResponse = ctx =>
-    {
-        // Cache images for 30 days
-        if (ctx.Context.Request.Path.StartsWithSegments("/images"))
-        {
-            ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=2592000");
-        }
-    }
-});
+app.UseStaticFiles();
 
 app.UseRouting();
 

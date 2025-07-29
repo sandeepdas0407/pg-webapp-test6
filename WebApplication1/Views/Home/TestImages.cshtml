@@ -1,80 +1,266 @@
 @{
-    ViewData["Title"] = "Image Test Page";
+    ViewData["Title"] = "Image Rendering Test";
 }
 
 <div class="container mt-4">
-    <h1>Image Test Page</h1>
-    <p>This page tests all images in the application to ensure they load correctly.</p>
+    <h1>🖼️ Image Rendering Test & Validation</h1>
+    <p class="lead">This page tests and validates all image rendering capabilities in the application.</p>
     
-    <div class="row mt-4">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h5>P&G Logo (Navigation)</h5>
-                </div>
-                <div class="card-body text-center">
-                    <img src="~/images/pg-logo.png" alt="P&G Logo" class="pg-logo" style="height: 40px; width: auto;">
-                    <p class="mt-2"><small>Path: ~/images/pg-logo.png</small></p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h5>Scientist Lab Image</h5>
-                </div>
-                <div class="card-body text-center">
-                    <img src="~/images/scientist-lab.jpg" alt="Scientist in laboratory" class="img-fluid" style="max-height: 200px;">
-                    <p class="mt-2"><small>Path: ~/images/scientist-lab.jpg</small></p>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="row mt-4">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h5>Woman Laundry Image</h5>
-                </div>
-                <div class="card-body text-center">
-                    <img src="~/images/woman-laundry.jpg" alt="Woman doing laundry" class="img-fluid" style="max-height: 200px;">
-                    <p class="mt-2"><small>Path: ~/images/woman-laundry.jpg</small></p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h5>Image Directory Status</h5>
-                </div>
-                <div class="card-body">
-                    <h6>Expected Images:</h6>
-                    <ul class="list-unstyled">
-                        <li>✅ pg-logo.png</li>
-                        <li>✅ scientist-lab.jpg</li>
-                        <li>✅ woman-laundry.jpg</li>
-                    </ul>
-                    <p class="text-success"><small>All images should load from ~/images/ folder</small></p>
-                </div>
-            </div>
-        </div>
-    </div>
-    
+    <!-- Real-time Status Panel -->
     <div class="row mt-4">
         <div class="col-12">
-            <div class="alert alert-info">
-                <h5>Image Organization Summary:</h5>
-                <ul>
-                    <li><strong>All images</strong> are stored in <code>wwwroot/images/</code> folder</li>
-                    <li><strong>Navigation logo</strong> uses standardized P&G branding</li>
-                    <li><strong>Content images</strong> have enhanced styling and hover effects</li>
-                    <li><strong>Responsive design</strong> ensures images scale properly on all devices</li>
-                    <li><strong>Lazy loading</strong> improves page performance</li>
-                </ul>
+            <div class="card border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">📊 Live Image Status</h5>
+                </div>
+                <div class="card-body">
+                    <div id="image-status" class="row">
+                        <div class="col-md-4">
+                            <strong>Total Images:</strong> <span id="total-images">Calculating...</span>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Loaded:</strong> <span id="loaded-images" class="text-success">0</span>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Failed:</strong> <span id="failed-images" class="text-danger">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Image Tests -->
+    <div class="row mt-4">
+        <!-- P&G Logo Test -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>🏷️ P&G Logo (Navigation)</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <picture>
+                            <source srcset="~/images/pg-logo.png" type="image/png">
+                            <img src="~/images/pg-logo.png" 
+                                 alt="P&G Logo Test" 
+                                 class="pg-logo test-image" 
+                                 loading="eager"
+                                 data-test="pg-logo"
+                                 style="border: 2px solid #dee2e6; padding: 10px;" />
+                        </picture>
+                    </div>
+                    <p><small><strong>Path:</strong> ~/images/pg-logo.png</small></p>
+                    <p><small><strong>Expected Size:</strong> 40-50px height</small></p>
+                    <div id="pg-logo-status" class="alert alert-info">Testing...</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scientist Image Test -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>🔬 Scientist Laboratory Image</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <picture>
+                            <source srcset="~/images/scientist-lab.jpg" type="image/jpeg">
+                            <img src="~/images/scientist-lab.jpg" 
+                                 alt="Scientist in laboratory" 
+                                 class="img-fluid test-image" 
+                                 loading="lazy"
+                                 data-test="scientist"
+                                 style="max-height: 200px; border: 2px solid #dee2e6;" />
+                        </picture>
+                    </div>
+                    <p><small><strong>Path:</strong> ~/images/scientist-lab.jpg</small></p>
+                    <p><small><strong>Expected:</strong> Responsive, with hover effects</small></p>
+                    <div id="scientist-status" class="alert alert-info">Testing...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <!-- Laundry Image Test -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>👕 Woman Laundry Image</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <picture>
+                            <source srcset="~/images/woman-laundry.jpg" type="image/jpeg">
+                            <img src="~/images/woman-laundry.jpg" 
+                                 alt="Woman doing laundry" 
+                                 class="img-fluid test-image" 
+                                 loading="lazy"
+                                 data-test="laundry"
+                                 style="max-height: 200px; border: 2px solid #dee2e6;" />
+                        </picture>
+                    </div>
+                    <p><small><strong>Path:</strong> ~/images/woman-laundry.jpg</small></p>
+                    <p><small><strong>Expected:</strong> Responsive, with hover effects</small></p>
+                    <div id="laundry-status" class="alert alert-info">Testing...</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Directory Validation -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>📁 Directory Validation</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Image Organization Status:</h6>
+                    <ul class="list-unstyled">
+                        <li id="dir-status-logo">🔄 Checking pg-logo.png...</li>
+                        <li id="dir-status-scientist">🔄 Checking scientist-lab.jpg...</li>
+                        <li id="dir-status-laundry">🔄 Checking woman-laundry.jpg...</li>
+                    </ul>
+                    
+                    <h6 class="mt-3">Technical Details:</h6>
+                    <ul class="list-unstyled small">
+                        <li><strong>Location:</strong> /wwwroot/images/</li>
+                        <li><strong>Caching:</strong> 30-day browser cache</li>
+                        <li><strong>Loading:</strong> Eager (logo), Lazy (content)</li>
+                        <li><strong>Fallbacks:</strong> SVG/Icon fallbacks enabled</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>🔧 Testing Actions</h5>
+                </div>
+                <div class="card-body text-center">
+                    <button class="btn btn-primary me-2" onclick="runImageTest()">🔍 Run Full Test</button>
+                    <button class="btn btn-warning me-2" onclick="reloadAllImages()">🔄 Reload All Images</button>
+                    <button class="btn btn-info me-2" onclick="checkImagePaths()">📂 Validate Paths</button>
+                    <button class="btn btn-success" onclick="window.location.href='/'">🏠 Back to Home</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Test Results Log -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>📋 Test Results Log</h5>
+                </div>
+                <div class="card-body">
+                    <div id="test-log" style="background-color: #f8f9fa; padding: 1rem; border-radius: 4px; font-family: monospace; max-height: 300px; overflow-y: auto;">
+                        Initializing image rendering tests...<br>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+// Enhanced test functionality
+document.addEventListener('DOMContentLoaded', function() {
+    runImageTest();
+    
+    // Update status counters every 2 seconds
+    setInterval(updateImageCounters, 2000);
+});
+
+function runImageTest() {
+    const testImages = document.querySelectorAll('.test-image');
+    let loadedCount = 0;
+    let failedCount = 0;
+    
+    logToTest('🧪 Starting comprehensive image rendering test...');
+    
+    testImages.forEach(function(img) {
+        const testType = img.getAttribute('data-test');
+        const statusDiv = document.getElementById(testType + '-status');
+        
+        img.addEventListener('load', function() {
+            loadedCount++;
+            statusDiv.className = 'alert alert-success';
+            statusDiv.textContent = '✅ Loaded successfully!';
+            logToTest(`✅ ${testType} image loaded: ${this.naturalWidth}x${this.naturalHeight}px`);
+            updateDirStatus(testType, true);
+        });
+        
+        img.addEventListener('error', function() {
+            failedCount++;
+            statusDiv.className = 'alert alert-danger';
+            statusDiv.textContent = '❌ Failed to load!';
+            logToTest(`❌ ${testType} image failed to load`);
+            updateDirStatus(testType, false);
+        });
+        
+        // Force reload to test
+        const originalSrc = img.src;
+        img.src = '';
+        setTimeout(() => img.src = originalSrc + '?test=' + Date.now(), 100);
+    });
+}
+
+function updateImageCounters() {
+    const totalImages = document.querySelectorAll('img').length;
+    const loadedImages = document.querySelectorAll('img').length - document.querySelectorAll('img[src=""], img:not([src])').length;
+    const failedImages = document.querySelectorAll('img.error').length;
+    
+    document.getElementById('total-images').textContent = totalImages;
+    document.getElementById('loaded-images').textContent = loadedImages;
+    document.getElementById('failed-images').textContent = failedImages;
+}
+
+function updateDirStatus(testType, success) {
+    const statusElement = document.getElementById('dir-status-' + testType);
+    if (success) {
+        statusElement.innerHTML = `✅ ${testType} image found and accessible`;
+        statusElement.className = 'text-success';
+    } else {
+        statusElement.innerHTML = `❌ ${testType} image not accessible`;
+        statusElement.className = 'text-danger';
+    }
+}
+
+function checkImagePaths() {
+    logToTest('🔍 Validating all image paths...');
+    
+    const paths = [
+        '/images/pg-logo.png',
+        '/images/scientist-lab.jpg',
+        '/images/woman-laundry.jpg'
+    ];
+    
+    paths.forEach(function(path) {
+        fetch(path, { method: 'HEAD' })
+            .then(function(response) {
+                if (response.ok) {
+                    logToTest(`✅ Path accessible: ${path} (${response.status})`);
+                } else {
+                    logToTest(`❌ Path not accessible: ${path} (${response.status})`);
+                }
+            })
+            .catch(function(error) {
+                logToTest(`❌ Error checking path: ${path} - ${error.message}`);
+            });
+    });
+}
+
+function logToTest(message) {
+    const log = document.getElementById('test-log');
+    const timestamp = new Date().toLocaleTimeString();
+    log.innerHTML += `[${timestamp}] ${message}<br>`;
+    log.scrollTop = log.scrollHeight;
+}
+</script>
