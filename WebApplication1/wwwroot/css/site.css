@@ -50,6 +50,21 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+/* P&G Logo Styling */
+.pg-logo {
+    height: 40px;
+    width: auto;
+    transition: transform 0.2s ease-in-out;
+}
+
+.pg-logo:hover {
+    transform: scale(1.05);
+}
+
+.navbar-brand {
+    padding: 0.5rem 0;
+}
+
 .navbar-brand {
     font-weight: bold;
     color: var(--pg-blue) !important;
