@@ -1,15 +1,16 @@
-name: Build and Deploy to Azure App Service
+name: Build and Deploy to Azure App Service (DISABLED)
 
 on:
-  push:
-    branches:
-      - main
-      - master
-  pull_request:
-    branches:
-      - main
-      - master
+  # Disabled to avoid conflicts with main deploy workflow
   workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+  #     - master
+  # pull_request:
+  #   branches:
+  #     - main
+  #     - master
 
 env:
   AZURE_WEBAPP_NAME: app-webapp-auvx5tx4cnram
