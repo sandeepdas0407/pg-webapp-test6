@@ -1,0 +1,58 @@
+name: Azure Developer CLI Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: Production
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+        
+    - name: Install Azure Developer CLI
+      uses: Azure/setup-azd@v1.0.0
+      
+    - name: Login to Azure
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: Azure Developer CLI - Login
+      run: |
+        azd auth login --client-id ${{ secrets.AZURE_CLIENT_ID }} --client-secret ${{ secrets.AZURE_CLIENT_SECRET }} --tenant-id ${{ secrets.AZURE_TENANT_ID }}
+      shell: bash
+      
+    - name: Set Azure Developer CLI environment
+      run: |
+        azd env set AZURE_ENV_NAME ${{ secrets.AZURE_ENV_NAME }}
+        azd env set AZURE_LOCATION ${{ secrets.AZURE_LOCATION }}
+        azd env set AZURE_SUBSCRIPTION_ID ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      shell: bash
+      
+    - name: Provision and Deploy with Azure Developer CLI
+      run: azd up --no-prompt
+      shell: bash
+      env:
+        AZURE_ENV_NAME: ${{ secrets.AZURE_ENV_NAME }}
+        AZURE_LOCATION: ${{ secrets.AZURE_LOCATION }}
+        AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}

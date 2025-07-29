@@ -1,0 +1,101 @@
+name: Build and Deploy to Azure App Service
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME: app-webapp-auvx5tx4cnram
+  AZURE_WEBAPP_PACKAGE_PATH: './WebApplication1'
+  DOTNET_VERSION: '9.0.x'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Restore dependencies
+      run: dotnet restore ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      
+    - name: Build application
+      run: dotnet build ${{ env.AZURE_WEBAPP_PACKAGE_PATH }} --configuration Release --no-restore
+      
+    - name: Test application
+      run: dotnet test ${{ env.AZURE_WEBAPP_PACKAGE_PATH }} --configuration Release --no-build --verbosity normal
+      continue-on-error: true
+      
+    - name: Publish application
+      run: dotnet publish ${{ env.AZURE_WEBAPP_PACKAGE_PATH }} --configuration Release --no-build --output ./publish
+      
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v4
+      with:
+        name: dotnet-app
+        path: ./publish
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      
+    steps:
+    - name: Download artifact from build job
+      uses: actions/download-artifact@v4
+      with:
+        name: dotnet-app
+        path: ./publish
+        
+    - name: Login to Azure
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: Deploy to Azure Web App
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        package: ./publish
+
+  deploy-infrastructure:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    environment:
+      name: 'Infrastructure'
+      
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Login to Azure
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: Deploy Azure infrastructure
+      uses: azure/arm-deploy@v2
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: rg-PandG1
+        template: ./infra/main.bicep
+        parameters: ./infra/main.parameters.json
+        deploymentMode: Incremental
+        deploymentName: 'github-deployment-${{ github.run_number }}'
