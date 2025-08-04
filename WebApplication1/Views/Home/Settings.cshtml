@@ -1,0 +1,81 @@
+@{
+    ViewData["Title"] = "Settings";
+}
+
+<div class="hero-section text-center">
+    <div class="container">
+        <h1>Settings</h1>
+        <p>Customize your experience</p>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Appearance</h2>
+                    
+                    <div class="row align-items-center mb-3">
+                        <div class="col-md-8">
+                            <h5 class="mb-1">Dark Mode</h5>
+                            <p class="text-muted mb-0">Switch between light and dark theme for better viewing experience</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="darkModeToggle">
+                                <label class="form-check-label" for="darkModeToggle">
+                                    <span id="darkModeLabel">Light Mode</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h2 class="card-title">About</h2>
+                    <p>P&G Ingredients web application helps you explore our commitment to product transparency and ingredient safety.</p>
+                    <p class="text-muted">Version 1.0.0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Dark mode toggle functionality
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const darkModeLabel = document.getElementById('darkModeLabel');
+        const body = document.body;
+        
+        // Check for saved theme preference or default to light mode
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        
+        // Apply saved theme on page load
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-theme');
+            darkModeToggle.checked = true;
+            darkModeLabel.textContent = 'Dark Mode';
+        } else {
+            body.classList.remove('dark-theme');
+            darkModeToggle.checked = false;
+            darkModeLabel.textContent = 'Light Mode';
+        }
+        
+        // Toggle dark mode
+        darkModeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                body.classList.add('dark-theme');
+                localStorage.setItem('theme', 'dark');
+                darkModeLabel.textContent = 'Dark Mode';
+            } else {
+                body.classList.remove('dark-theme');
+                localStorage.setItem('theme', 'light');
+                darkModeLabel.textContent = 'Light Mode';
+            }
+        });
+    </script>
+}

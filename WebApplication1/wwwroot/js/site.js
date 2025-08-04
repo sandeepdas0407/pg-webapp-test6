@@ -2,6 +2,9 @@
 
 // Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize dark mode from localStorage
+    initializeDarkMode();
+    
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -33,3 +36,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// Dark mode functionality
+function initializeDarkMode() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    const body = document.body;
+    
+    if (savedTheme === 'dark') {
+        body.classList.add('dark-theme');
+    } else {
+        body.classList.remove('dark-theme');
+    }
+}

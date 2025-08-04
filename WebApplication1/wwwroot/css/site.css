@@ -4,6 +4,28 @@
     --pg-light-blue: #0066b2;
     --pg-dark-blue: #001f54;
     --pg-text-gray: #333333;
+    
+    /* Light theme colors */
+    --bg-color: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --text-color: #333333;
+    --text-muted: #6c757d;
+    --border-color: #dee2e6;
+    --card-bg: #ffffff;
+    --navbar-bg: #ffffff;
+    --navbar-text: #000000;
+}
+
+/* Dark theme colors */
+body.dark-theme {
+    --bg-color: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --text-color: #e9ecef;
+    --text-muted: #adb5bd;
+    --border-color: #495057;
+    --card-bg: #2d2d2d;
+    --navbar-bg: #2d2d2d;
+    --navbar-text: #e9ecef;
 }
 
 html {
@@ -15,8 +37,10 @@ html {
 body {
     margin-bottom: 160px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: var(--pg-text-gray);
+    color: var(--text-color);
     line-height: 1.6;
+    background-color: var(--bg-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .footer {
@@ -46,8 +70,18 @@ body {
 
 /* Header */
 .navbar {
-    background-color: white !important;
+    background-color: var(--navbar-bg) !important;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease;
+}
+
+.navbar .nav-link {
+    color: var(--navbar-text) !important;
+    transition: color 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+    color: var(--pg-light-blue) !important;
 }
 
 /* P&G Logo Styling - moved to enhanced section below */
@@ -111,7 +145,9 @@ body {
     overflow: hidden;
     margin-bottom: 2rem;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
 }
 
 .card:hover {
@@ -155,7 +191,8 @@ body {
     padding: 1.5rem;
     margin-bottom: 1.5rem;
     border-left: 4px solid var(--pg-blue);
-    background-color: #f8f9fa;
+    background-color: var(--bg-secondary);
+    transition: background-color 0.3s ease;
 }
 
 .search-form {
@@ -180,17 +217,19 @@ body {
 /* Specific image containers */
 .scientist-image-container {
     padding: 1rem;
-    background-color: #f8f9fa;
+    background-color: var(--bg-secondary);
     border-radius: 12px;
     margin: 1rem 0;
+    transition: background-color 0.3s ease;
 }
 
 .laundry-image-container {
     padding: 1rem;
-    background-color: #f8f9fa;
+    background-color: var(--bg-secondary);
     border-radius: 12px;
     margin: 1rem 0;
     text-align: center;
+    transition: background-color 0.3s ease;
 }
 
 /* Ensure images load properly */
